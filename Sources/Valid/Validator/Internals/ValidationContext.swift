@@ -36,6 +36,24 @@ class ValidationContext<Input> {
         return await validator.validate(input: value, on: self)
     }
 
+    func validate<T>(_ keyPath: KeyPath<Input, T>,
+                     name: String?,
+                     using validator: InternalValidator<T>,
+                     as type: Any.Type,
+                     location: Location) async -> ValidationResult {
+
+        let childValue = value[keyPath: keyPath]
+        let context = ValidationContext<T>(value: childValue, lazy: lazy)
+        let result = await context.validate(using: validator)
+        let child = BasicValidationResults<Input>.Child(keyPath: keyPath, results: context.build())
+        children.append(child)
+        let group = Check.Group(name: name ?? keyPath._kvcKeyPathString ?? String(describing: type),
+                                checks: context.checks,
+                                validation: result)
+        check(Check(type: type, kind: .group(group), location: location))
+        return result
+    }
+
     func validateSubGroup(name: String? = nil,
                           using validator: InternalValidator<Input>,
                           as type: Any.Type,
@@ -48,4 +66,7 @@ class ValidationContext<Input> {
         return result
     }
 
+    func build() -> BasicValidationResults<Input> {
+        return BasicValidationResults(value: value, local: diagnostics, children: children)
+    }
 }
