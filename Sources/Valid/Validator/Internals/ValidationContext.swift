@@ -35,4 +35,17 @@ class ValidationContext<Input> {
     func validate(using validator: InternalValidator<Input>) async -> ValidationResult {
         return await validator.validate(input: value, on: self)
     }
+
+    func validateSubGroup(name: String? = nil,
+                          using validator: InternalValidator<Input>,
+                          as type: Any.Type,
+                          location: Location) async -> ValidationResult {
+        let context = ValidationContext(value: value, lazy: lazy)
+        let result = await context.validate(using: validator)
+        diagnostics = diagnostics + context.diagnostics
+        let group = Check.Group(name: name ?? String(describing: type), checks: context.checks, validation: result)
+        check(Check(type: type, kind: .group(group), location: location))
+        return result
+    }
+
 }
