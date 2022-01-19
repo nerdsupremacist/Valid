@@ -72,3 +72,34 @@ extension ValidationRulesBuilder {
     }
 }
 
+extension ValidationRulesBuilder {
+    public static func buildArray<Input>(_ components: [PartialValidationRules<Input>]) -> PartialValidationRules<Input> {
+        return PartialValidationRules(validator: CompoundValidator(validators: components.map(\.validator)))
+    }
+}
+
+extension ValidationRulesBuilder {
+    public static func buildBlock<Input>() -> PartialValidationRules<Input> {
+        return PartialValidationRules(validator: InternalValidator())
+    }
+
+    public static func buildBlock<Input>(_ components: PartialValidationRules<Input>...) -> PartialValidationRules<Input> {
+        return PartialValidationRules(validator: CompoundValidator(validators: components.map(\.validator)))
+    }
+
+    public static func buildBlock<Input>(_ component: ValidationRules<Input>) -> ValidationRules<Input> {
+        return component
+    }
+
+    public static func buildBlock<Input>(_ c0: PartialValidationRules<Input>, _ c1: ValidationRules<Input>) -> ValidationRules<Input> {
+        return ValidationRules(validator: c0.validator.followed(by: c1.validator))
+    }
+
+    public static func buildBlock<Input>(_ c0: PartialValidationRules<Input>, _ c1: PartialValidationRules<Input>, _ c2: ValidationRules<Input>) -> ValidationRules<Input> {
+        return ValidationRules(validator: c0.validator.followed(by: c1.validator).followed(by: c2.validator))
+    }
+
+    public static func buildBlock<Input>(_ c0: PartialValidationRules<Input>, _ c1: PartialValidationRules<Input>, _ c2: PartialValidationRules<Input>, _ c3: ValidationRules<Input>) -> ValidationRules<Input> {
+        return ValidationRules(validator: c0.validator.followed(by: c1.validator).followed(by: c2.validator).followed(by: c3.validator))
+    }
+}
