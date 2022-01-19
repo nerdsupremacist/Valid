@@ -9,8 +9,8 @@ public class BaseValidationRules<Input> {
     }
 }
 
-public class PartialValidationRules<Input>: BaseValidationRules<Input> {
+public final class PartialValidationRules<Input>: BaseValidationRules<Input> {
 }
 
-public class ValidationRules<Input>: BaseValidationRules<Input> {
+public final class ValidationRules<Input>: BaseValidationRules<Input> {
 }

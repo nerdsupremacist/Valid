@@ -1,7 +1,7 @@
 
 import Foundation
 
-class CompoundValidator<Input>: InternalValidator<Input> {
+final class CompoundValidator<Input>: InternalValidator<Input> {
     let validators: [InternalValidator<Input>]
 
     init(validators: [InternalValidator<Input>]) {

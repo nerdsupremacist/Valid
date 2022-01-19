@@ -49,7 +49,7 @@ extension Property: PartialValidator where Rules == PartialValidationRules<T> {
     }
 }
 
-private class PropertyValidator<Input, T>: InternalValidator<Input> {
+private final class PropertyValidator<Input, T>: InternalValidator<Input> {
     private let name: String?
     private let keyPath: KeyPath<Input, T>
     private let location: Location

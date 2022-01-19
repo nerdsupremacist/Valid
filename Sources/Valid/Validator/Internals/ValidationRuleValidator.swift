@@ -1,7 +1,7 @@
 
 import Foundation
 
-class ValidationRuleValidator<Input>: InternalValidator<Input> {
+final class ValidationRuleValidator<Input>: InternalValidator<Input> {
     private class Storage {
         var type: Any.Type {
             return Int.self
@@ -12,7 +12,7 @@ class ValidationRuleValidator<Input>: InternalValidator<Input> {
         }
     }
 
-    private class RuleStorage<R: ValidationRule>: Storage where R.Input == Input {
+    private final class RuleStorage<R: ValidationRule>: Storage where R.Input == Input {
         private let rule: R
 
         init(rule: R) {

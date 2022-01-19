@@ -32,7 +32,7 @@ public struct AllowIfChildValidationAllows<Input>: PartialValidator {
     }
 }
 
-private class InternalAllowIfChildValidationAllowsValidator<Input>: InternalValidator<Input> {
+private final class InternalAllowIfChildValidationAllowsValidator<Input>: InternalValidator<Input> {
     private let name: String?
     private let validator: InternalValidator<Input>
     private let location: Location

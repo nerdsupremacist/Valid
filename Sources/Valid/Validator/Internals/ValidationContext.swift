@@ -1,7 +1,7 @@
 
 import Foundation
 
-class ValidationContext<Input> {
+final class ValidationContext<Input> {
     private let value: Input
     let lazy: Bool
     private var diagnostics: Diagnostics

@@ -54,7 +54,7 @@ final class BasicValidationResults<Value>: ValidationResultsProtocol {
     }
 }
 
-class ChildValidationResults<Parent, Value>: ValidationResultsProtocol {
+final class ChildValidationResults<Parent, Value>: ValidationResultsProtocol {
     private let parent: BasicValidationResults<Parent>
     private let keyPath: KeyPath<Parent, Value>
 
