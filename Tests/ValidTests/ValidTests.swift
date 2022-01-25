@@ -10,7 +10,7 @@ struct PasswordValidator: Validator {
             }
 
         Property(\String.count) {
-            DenyIf(message: "Length must not be even") { $0 % 2 == 0 }
+            DenyIf("Length must not be even") { $0 % 2 == 0 }
 
             DenyIfTooSmall(minimum: 8)
         }
