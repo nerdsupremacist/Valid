@@ -11,7 +11,7 @@ struct PasswordValidator: Validator {
 
         DenyIfContainsTooFewCharactersFromSet(.decimalDigits, minimum: 2, message: "Must contain at least 2 numbers")
 
-        DenyIfContainsTooFewCharactersFromSet(.capitalizedLetters, minimum: 1, message: "Must contain at least 1 capitalized letter")
+        DenyIfContainsTooFewCharactersFromSet(.uppercaseLetters, minimum: 1, message: "Must contain at least 1 uppercase letter")
 
         Property(\String.count) {
             DenyIf("Length must not be even") { $0 % 2 == 0 }
@@ -25,10 +25,71 @@ struct PasswordValidator: Validator {
 
 
 final class ValidTests: XCTestCase {
-    func testExample() async {
+    func testInvalidCharacters() async {
         let validator = PasswordValidator()
-        let results = await validator.validate(input: "12😂345", lazy: false)
-        print(results.all.errors)
-        print(results.checks)
+        let results = await validator.validate(input: "Hello😂123", lazy: false)
+        XCTAssertDenies(results)
+        let errors = results.all.errors
+        XCTAssertEqual(errors.count, 1)
+        XCTAssertEqual(errors[0].message, "Characters \"😂\" are not allowed")
+        XCTAssertEqual(errors[0].location.line, 6)
     }
+
+    func testTooFewDecimals() async {
+        let validator = PasswordValidator()
+        let results = await validator.validate(input: "Hello1Hello", lazy: false)
+        XCTAssertDenies(results)
+        let errors = results.all.errors
+        XCTAssertEqual(errors.count, 1)
+        XCTAssertEqual(errors[0].message, "Must contain at least 2 numbers")
+        XCTAssertEqual(errors[0].location.line, 12)
+    }
+
+    func testNoCapitals() async {
+        let validator = PasswordValidator()
+        let results = await validator.validate(input: "hello123hello", lazy: false)
+        XCTAssertDenies(results)
+        let errors = results.all.errors
+        XCTAssertEqual(errors.count, 1)
+        XCTAssertEqual(errors[0].message, "Must contain at least 1 uppercase letter")
+        XCTAssertEqual(errors[0].location.line, 14)
+    }
+
+    func testEven() async {
+        let validator = PasswordValidator()
+        let results = await validator.validate(input: "Hello1234hello", lazy: false)
+        XCTAssertDenies(results)
+        let errors = results.all.errors
+        XCTAssertEqual(errors.count, 1)
+        XCTAssertEqual(errors[0].message, "Length must not be even")
+        XCTAssertEqual(errors[0].location.line, 17)
+    }
+
+    func testTooSmall() async {
+        let validator = PasswordValidator()
+        let results = await validator.validate(input: "H123l", lazy: false)
+        XCTAssertDenies(results)
+        let errors = results.all.errors
+        XCTAssertEqual(errors.count, 1)
+        XCTAssertEqual(errors[0].message, "Must be at least 8 characters long")
+        XCTAssertEqual(errors[0].location.line, 19)
+    }
+}
+
+func XCTAssertDenies<T>(_ results: @autoclosure () -> Validation<T>,
+                        _ message: @autoclosure () -> String = "",
+                        file: StaticString = #file,
+                        line: UInt = #line) {
+
+    guard case .allow = results().verdict else { return }
+    XCTFail(message(), file: file, line: line)
+}
+
+func XCTAssertAllows<T>(_ results: @autoclosure () -> Validation<T>,
+                        _ message: @autoclosure () -> String = "",
+                        file: StaticString = #file,
+                        line: UInt = #line) {
+
+    guard case .deny = results().verdict else { return }
+    XCTFail(message(), file: file, line: line)
 }
