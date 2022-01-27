@@ -69,8 +69,8 @@ struct PasswordValidator: Validator {
 ```
 
 We just used the DenyIf rule. This rule says that we will deny the input, when our closure evaluates to true. So for any password with 8 characters or longer, the DenyIf won't deny it, and we will continue to our next rule on the list, which is AlwaysAllow.
-But in Valid you can write composable and reusable rules. And you can reuse rules for the values of properties. 
-So for example another way of writing the 8 Characters rule would be:
+While we're at it, a fun aspect of the DSL is that in Valid you can write composable and reusable rules. And you can reuse rules for the values of properties. 
+So for example another way of writing the 8 Characters rule would be to validate the value of count:
 
 ```swift
 struct PasswordValidator: Validator {
