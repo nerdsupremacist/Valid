@@ -38,12 +38,12 @@ final class ValidationRuleValidator<Input>: InternalValidator<Input> {
 
     override func validate(input: Input, on context: ValidationContext<Input>) async -> ValidationResult {
         let result = await storage.evaluate(on: input)
-        context.check(Check(type: storage.type, kind: .validation(result), location: location))
+        await context.check(Check(type: storage.type, kind: .validation(result), location: location))
         switch result {
         case .allow(.some(let message)):
-            context.success(Diagnostic(message: message, location: location))
+            await context.success(Diagnostic(message: message, location: location))
         case .deny(.some(let message)):
-            context.error(Diagnostic(message: message, location: location))
+            await context.error(Diagnostic(message: message, location: location))
         case .allow, .deny, .skip:
             break
         }

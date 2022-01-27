@@ -22,7 +22,7 @@ extension Validator {
         case .skip:
             verdict = .deny(message: nil)
         }
-        return Validation(verdict: verdict, checks: context.checks, results: context.build())
+        return Validation(verdict: verdict, checks: await context.checks, results: await context.build())
     }
 
     public func isValid(input: Input) async -> Bool {

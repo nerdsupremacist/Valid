@@ -1,7 +1,7 @@
 
 import Foundation
 
-final class ValidationContext<Input> {
+final actor ValidationContext<Input> {
     private let value: Input
     let lazy: Bool
     private var diagnostics: Diagnostics
@@ -45,11 +45,11 @@ final class ValidationContext<Input> {
         let childValue = value[keyPath: keyPath]
         let context = ValidationContext<T>(value: childValue, lazy: lazy)
         let result = await context.validate(using: validator)
-        let child = BasicValidationResults<Input>.Child(keyPath: keyPath, results: context.build())
+        let child = await BasicValidationResults<Input>.Child(keyPath: keyPath, results: context.build())
         children.append(child)
-        let group = Check.Group(name: name ?? keyPath._kvcKeyPathString ?? String(describing: type),
-                                checks: context.checks,
-                                validation: result)
+        let group = await Check.Group(name: name ?? keyPath._kvcKeyPathString ?? String(describing: type),
+                                      checks: context.checks,
+                                      validation: result)
         check(Check(type: type, kind: .group(group), location: location))
         return result
     }
@@ -60,8 +60,8 @@ final class ValidationContext<Input> {
                           location: Location) async -> ValidationResult {
         let context = ValidationContext(value: value, lazy: lazy)
         let result = await context.validate(using: validator)
-        diagnostics = diagnostics + context.diagnostics
-        let group = Check.Group(name: name ?? String(describing: type), checks: context.checks, validation: result)
+        diagnostics = await diagnostics + context.diagnostics
+        let group = await Check.Group(name: name ?? String(describing: type), checks: context.checks, validation: result)
         check(Check(type: type, kind: .group(group), location: location))
         return result
     }

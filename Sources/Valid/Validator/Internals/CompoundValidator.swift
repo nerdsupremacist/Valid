@@ -26,20 +26,43 @@ final class CompoundValidator<Input>: InternalValidator<Input> {
                     continue
                 }
             }
+
+            return .skip
         }
 
-        var currentResult: ValidationResult?
-        for validator in validators {
-            let result = await context.validate(using: validator)
+        let results = await validators.concurrentMap { await context.validate(using: $0) }
+        for result in results {
             switch result {
             case .allow, .deny:
-                if currentResult == nil {
-                    currentResult = result
-                }
+                return result
             case .skip:
                 continue
             }
         }
-        return currentResult ?? .skip
+        
+        return .skip
+    }
+}
+
+extension Sequence {
+    fileprivate func concurrentMap<T>(transform: @escaping (Element) async throws -> T) async rethrows -> [T] {
+        let tasks = map { element in
+            Task {
+                try await transform(element)
+            }
+        }
+
+        return try await tasks.asyncMap { task in
+            try await task.value
+        }
+    }
+    func asyncMap<T>(transform: (Element) async throws -> T) async rethrows -> [T] {
+        var values = [T]()
+
+        for element in self {
+            try await values.append(transform(element))
+        }
+
+        return values
     }
 }
