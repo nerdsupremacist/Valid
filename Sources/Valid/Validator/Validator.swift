@@ -19,7 +19,7 @@ extension Validator {
             verdict = .allow(message: message)
         case .deny(let message):
             verdict = .deny(message: message)
-        case .skip:
+        case .skip, .warning:
             verdict = .deny(message: nil)
         }
         return Validation(verdict: verdict, checks: await context.checks, results: await context.build())

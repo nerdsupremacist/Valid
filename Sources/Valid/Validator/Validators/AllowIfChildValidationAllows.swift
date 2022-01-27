@@ -48,7 +48,7 @@ private final class InternalAllowIfChildValidationAllowsValidator<Input>: Intern
         switch result {
         case .allow:
             return result
-        case .skip, .deny:
+        case .skip, .deny, .warning:
             return .skip
         }
     }

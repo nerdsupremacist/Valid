@@ -44,6 +44,8 @@ final class ValidationRuleValidator<Input>: InternalValidator<Input> {
             await context.success(Diagnostic(message: message, location: location))
         case .deny(.some(let message)):
             await context.error(Diagnostic(message: message, location: location))
+        case .warning(let message):
+            await context.warning(Diagnostic(message: message, location: location))
         case .allow, .deny, .skip:
             break
         }

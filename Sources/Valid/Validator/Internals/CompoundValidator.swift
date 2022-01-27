@@ -22,7 +22,7 @@ final class CompoundValidator<Input>: InternalValidator<Input> {
                 switch result {
                 case .allow, .deny:
                     return result
-                case .skip:
+                case .skip, .warning:
                     continue
                 }
             }
@@ -35,7 +35,7 @@ final class CompoundValidator<Input>: InternalValidator<Input> {
             switch result {
             case .allow, .deny:
                 return result
-            case .skip:
+            case .skip, .warning:
                 continue
             }
         }

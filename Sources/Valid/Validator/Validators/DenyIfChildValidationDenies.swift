@@ -48,7 +48,7 @@ private final class InternalDenyIfChildValidationDeniesValidator<Input>: Interna
         switch result {
         case .deny:
             return result
-        case .skip, .allow:
+        case .skip, .allow, .warning:
             return .skip
         }
     }
