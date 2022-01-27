@@ -74,6 +74,13 @@ final class ValidTests: XCTestCase {
         XCTAssertEqual(errors[0].message, "Must be at least 8 characters long")
         XCTAssertEqual(errors[0].location.line, 19)
     }
+
+    func testValid() async {
+        let validator = PasswordValidator()
+        let results = await validator.validate(input: "H123Password!")
+        XCTAssertAllows(results)
+        print(results.all.errors)
+    }
 }
 
 func XCTAssertDenies<T>(_ results: @autoclosure () -> Validation<T>,
