@@ -17,7 +17,7 @@
 
 Input Validation Done Right. Have you ever struggled with a website with strange password requirements. 
 Especially those crazy weird ones where they tell you whats wrong with your password one step at a time.  And it like takes forever.
-Well I have. And to prove a point, and, to be honest, mainly as a joke, I coded a DSL for password requirements.
+Well I have. And to prove a point, and, to be honest, mainly as a joke, [I coded a DSL for password requirements](https://gist.github.com/nerdsupremacist/bd0ffb7ab5e8a8e31259b13418dc27a6#file-passwords-swift-L304).
 After a while I decided to make it more generic, and here is the version that can validate any input. 
 And I called it Valid.
 
