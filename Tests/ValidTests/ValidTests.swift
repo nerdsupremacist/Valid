@@ -79,7 +79,6 @@ final class ValidTests: XCTestCase {
         let validator = PasswordValidator()
         let results = await validator.validate(input: "H123Password!")
         XCTAssertAllows(results)
-        print(results.all.errors)
     }
 }
 
