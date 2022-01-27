@@ -44,7 +44,7 @@ let package = Package(
 So what can you validate with Valid? Well pretty much anything you'd like. You can use it to:
 - Validate Password Requirements
 - Privacy and Access Control Checks
-- and many more use cases
+- well, I honestly haven't thought of more easy to explain examples, but the possibilities are endless...
 
 Let's start with an example. Let's start validating some passwords. For that we create a Validator, with a set of rules:
 
