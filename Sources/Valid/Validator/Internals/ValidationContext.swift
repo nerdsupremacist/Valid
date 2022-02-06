@@ -66,6 +66,19 @@ final actor ValidationContext<Input> {
         return result
     }
 
+    func validateForSome<T>(using validator: InternalValidator<T>, as type: Any.Type, location: Location) async -> ValidationResult where Input == T? {
+        guard let value = value else {
+            check(Check(type: type, kind: .validation(.skip), location: location))
+            return .skip
+        }
+
+        let context = ValidationContext<T>(value: value, lazy: lazy)
+        let result = await context.validate(using: validator)
+        diagnostics = await diagnostics + context.diagnostics
+        checks.append(contentsOf: await context.checks)
+        return result
+    }
+
     func build() -> BasicValidationResults<Input> {
         return BasicValidationResults(value: value, local: diagnostics, children: children)
     }
