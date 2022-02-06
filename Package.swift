@@ -14,7 +14,11 @@ let package = Package(
     targets: [
         .target(name: "Valid",
                 dependencies: [],
-                exclude: ["Validator/ValidationRulesBuilder.swift.gyb"]),
+                exclude: [
+                    "Validator/ValidationRulesBuilder.swift.gyb",
+                    "Validator/Rules/Implementations/Common/Conditions/Conditions.swift.gyb",
+                    "Validator/Rules/Implementations/Common/Conditions/conditions.json",
+                ]),
         .testTarget(name: "ValidTests",
                     dependencies: ["Valid"]),
     ]
