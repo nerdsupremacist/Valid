@@ -76,7 +76,8 @@ So for example another way of writing the 8 Characters rule would be to validate
 struct PasswordValidator: Validator {
     var rules: ValidationRules<String> {
         Property(\String.count) {
-            DenyIfTooSmall(minimum: 8, message: "Must be at least 8 characters long")
+            DenyIfTooSmall(minimum: 8)
+                .message("Must be at least 8 characters long")
         }
         
         AlwaysAllow<String>()
@@ -93,7 +94,8 @@ struct PasswordValidator: Validator {
         DenyIfContainsInvalidCharacters(allowedCharacters: .letters.union(.decimalDigits).union(.punctuationCharacters))
         
         Property(\String.count) {
-            DenyIfTooSmall(minimum: 8, message: "Must be at least 8 characters long")
+            DenyIfTooSmall(minimum: 8)
+                .message("Must be at least 8 characters long")
         }
         
         AlwaysAllow<String>()
@@ -107,7 +109,7 @@ We can even tell the user which characters are wrong:
 struct PasswordValidator: Validator {
     var rules: ValidationRules<String> {
         DenyIfContainsInvalidCharacters(allowedCharacters: .letters.union(.decimalDigits).union(.punctuationCharacters))
-            .withMessage { invalidCharacters in
+            .message { invalidCharacters in
                 let listed = invalidCharacters.map { "\"\($0)\"" }.joined(separator: ", ")
                 // Feel free to do better localization and plural handling
                 return "Character(s) \(listed) is/are not allowed"
@@ -128,7 +130,7 @@ Or the classic, your password must contain a number:
 struct PasswordValidator: Validator {
     var rules: ValidationRules<String> {
         DenyIfContainsInvalidCharacters(allowedCharacters: .letters.union(.decimalDigits).union(.punctuationCharacters))
-            .withMessage { invalidCharacters in
+            .message { invalidCharacters in
                 let listed = invalidCharacters.map { "\"\($0)\"" }.joined(separator: ", ")
                 // Feel free to do better localization and plural handling
                 return "Character(s) \(listed) is/are not allowed"
