@@ -6,6 +6,11 @@ public enum FinalValidation {
     case deny(message: String? = nil)
 }
 
+extension FinalValidation {
+    public static let allow: FinalValidation = .allow()
+    public static let deny: FinalValidation = .deny()
+}
+
 public protocol FinalValidationRule: ValidationRule where Result == FinalValidation {
     associatedtype Input
     
