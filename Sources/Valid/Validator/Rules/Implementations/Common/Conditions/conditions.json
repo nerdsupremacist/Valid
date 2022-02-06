@@ -1,0 +1,121 @@
+[
+    {
+        "name": "StartsWithSubstring",
+        "type": "String",
+        "is_protocol": false,
+        "parameters": [
+            {
+                "name": "substring",
+                "type": "String",
+                "named": false
+            }
+        ],
+        "condition": "input.hasPrefix(substring)"
+    },
+    {
+        "name": "EndsWithSubstring",
+        "type": "String",
+        "is_protocol": false,
+        "parameters": [
+            {
+                "name": "substring",
+                "type": "String",
+                "label": "_"
+            }
+        ],
+        "condition": "input.hasSuffix(substring)"
+    },
+    {
+        "name": "Equals",
+        "type": "Equatable",
+        "is_protocol": true,
+        "parameters": [
+            {
+                "name": "expected",
+                "type": "Input",
+                "label": "_"
+            }
+        ],
+        "condition": "input == expected"
+    },
+    {
+        "name": "Different",
+        "type": "Equatable",
+        "is_protocol": true,
+        "parameters": [
+            {
+                "name": "comparedValue",
+                "type": "Input",
+                "label": "from"
+            }
+        ],
+        "condition": "input != comparedValue"
+    },
+    {
+        "name": "Contains",
+        "type": "Sequence",
+        "constraint": "Input.Element: Hashable",
+        "is_protocol": true,
+        "parameters": [
+            {
+                "name": "needle",
+                "type": "Input.Element",
+                "label": "_"
+            }
+        ],
+        "condition": "input.contains(needle)"
+    },
+    {
+        "name": "SmallerThan",
+        "type": "Collection",
+        "is_protocol": true,
+        "parameters": [
+            {
+                "name": "size",
+                "type": "Int",
+                "label": "_"
+            }
+        ],
+        "condition": "input.count < size"
+    },
+    {
+        "name": "LargerThan",
+        "type": "Collection",
+        "is_protocol": true,
+        "parameters": [
+            {
+                "name": "size",
+                "type": "Int",
+                "label": "_"
+            }
+        ],
+        "condition": "input.count > size"
+    },
+    {
+        "name": "Empty",
+        "type": "Collection",
+        "is_protocol": true,
+        "parameters": [],
+        "condition": "input.isEmpty"
+    },
+    {
+        "name": "NotEmpty",
+        "type": "Collection",
+        "is_protocol": true,
+        "parameters": [],
+        "condition": "!input.isEmpty"
+    },
+    {
+        "name": "PartOfSet",
+        "type": "Hashable",
+        "is_protocol": true,
+        "parameters": [
+            {
+                "name": "set",
+                "type": "Set<Input>",
+                "label": "_"
+            }
+        ],
+        "condition": "set.contains(input)"
+    }
+]

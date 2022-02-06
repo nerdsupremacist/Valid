@@ -1,0 +1,50 @@
+
+import Foundation
+%{
+    import json
+
+    modules = []
+    with open('./conditions.json') as file:
+        conditions = json.loads(file.read())
+}%
+% for condition in conditions:
+
+// MARK: - ${condition['name']}
+
+% constraint = " where {}".format(condition['constraint']) if 'constraint' in condition else ""
+% if condition['is_protocol']:
+public struct __${condition['name']}Rule<Input: ${condition['type']}, Kind: ConditionalResultKind>: ConditionalValidationRule${constraint} {
+% else:
+public struct __${condition['name']}Rule<Kind: ConditionalResultKind>: ConditionalValidationRule {
+    public typealias Input = ${condition['type']}
+% end
+    public typealias Result = Kind.Result
+
+% for parameter in condition['parameters']:
+    public let ${parameter['name']}: ${parameter['type']}
+% end
+
+% init_params = ["{} {}: {}".format(parameter['label'], parameter['name'], parameter['type']) if 'label' in parameter else "{}: {}".format(parameter['name'], parameter['type']) for parameter in condition['parameters']]
+% joined_params = ", ".join(init_params)
+    public init(${joined_params}) {
+% for parameter in condition['parameters']:
+        self.${parameter['name']} = ${parameter['name']}
+% end
+    }
+
+    public func evaluate(on input: Input) async -> ConditionalValidationResult {
+        guard ${condition['condition']} else { return .skip }
+        return .met
+    }
+}
+
+% if condition['is_protocol']:
+public typealias AllowIf${condition['name']}<Input: ${condition['type']}> = __${condition['name']}Rule<Input, AllowOnConditionKind>${constraint}
+public typealias DenyIf${condition['name']}<Input: ${condition['type']}> = __${condition['name']}Rule<Input, DenyOnConditionKind>${constraint}
+public typealias WarnIf${condition['name']}<Input: ${condition['type']}> = __${condition['name']}Rule<Input, WarnOnConditionKind>${constraint}
+% else:
+public typealias AllowIf${condition['name']} = __${condition['name']}Rule<AllowOnConditionKind>
+public typealias DenyIf${condition['name']} = __${condition['name']}Rule<DenyOnConditionKind>
+public typealias WarnIf${condition['name']} = __${condition['name']}Rule<WarnOnConditionKind>
+
+% end
