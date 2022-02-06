@@ -5,7 +5,7 @@ public struct WarnIf<Input>: WarningEmmitter {
     private let message: String
     private let condition: (Input) async -> Bool
 
-    public init(message: String, condition: @escaping (Input) async -> Bool) {
+    public init(_ message: String, condition: @escaping (Input) async -> Bool) {
         self.message = message
         self.condition = condition
     }
