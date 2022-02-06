@@ -30,16 +30,16 @@ public struct DenyIfContainsInvalidCharacters: MaybeDenyValidationRule {
 
 extension DenyIfContainsInvalidCharacters {
 
-    public func withMessage(formatter: CharactersNotAllowedInStringMessageFormatter) -> DenyIfContainsInvalidCharacters {
+    public func message(formatter: CharactersNotAllowedInStringMessageFormatter) -> DenyIfContainsInvalidCharacters {
         return DenyIfContainsInvalidCharacters(allowedCharacters: allowedCharacters, formatter: formatter)
     }
 
-    public func withMessage(formatter closure: @escaping ([Character], String) -> String) -> DenyIfContainsInvalidCharacters {
-        return withMessage(formatter: BasicCharactersNotAllowedInStringMessageFormatter(closure: closure))
+    public func message(formatter closure: @escaping ([Character], String) -> String) -> DenyIfContainsInvalidCharacters {
+        return message(formatter: BasicCharactersNotAllowedInStringMessageFormatter(closure: closure))
     }
 
-    public func withMessage(formatter closure: @escaping ([Character]) -> String) -> DenyIfContainsInvalidCharacters {
-        return withMessage { characters, _ in closure(characters) }
+    public func message(formatter closure: @escaping ([Character]) -> String) -> DenyIfContainsInvalidCharacters {
+        return message { characters, _ in closure(characters) }
     }
 
 }
