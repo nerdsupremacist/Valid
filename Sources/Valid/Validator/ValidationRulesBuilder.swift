@@ -5,7 +5,15 @@ import Foundation
 
 @resultBuilder
 public struct ValidationRulesBuilder {
-    
+
+    public static func buildExpression<T : ConditionalValidationRule>(_ expression: T,
+                                                            file: StaticString = #file,
+                                                            function: StaticString = #function,
+                                                            line: Int = #line) -> PartialValidationRules<T.Input> {
+
+        return PartialValidationRules(validator: ValidationRuleValidator(rule: expression, file: file, function: function, line: line))
+    }
+
     public static func buildExpression<T : MaybeAllowValidationRule>(_ expression: T,
                                                                      file: StaticString = #file,
                                                                      function: StaticString = #function,
